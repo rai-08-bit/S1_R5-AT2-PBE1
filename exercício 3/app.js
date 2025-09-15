@@ -6,18 +6,17 @@ app.use(express.json());
 
 app.post ('/soma', (req, res) =>{
     try {
-        const {soma} = req.body.soma; // constante criada e atribuída para requisição do corpo da página em JSON
+        const {soma} = req.body; // constante criada e atribuída para requisição do corpo da página em JSON
         console.log(soma)
 
-        if (req.body.soma){
+        if (!soma){
             return res.status(400).send("Formato inválido");
         }
 
-        if (soma) { // verificação de números, se realmente números foram digitados
-            return res.status(400).send("Apenas números devem ser digitados!");
-        }
+        const somaTotal = soma.reduce((acumulado, corrente) => acumulado + Number(corrente), 0); 
 
-        res.status(201).json({message: `A soma dos dados é: ${dados.resultado} `});
+        return res.status(200).send(`A soma total dos números digitados é ${somaTotal}`);
+
     } catch (error) {
         console.log(error);
         res.status(500).json(error); // servidor não conectado
